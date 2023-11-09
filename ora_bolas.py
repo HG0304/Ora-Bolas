@@ -6,20 +6,23 @@
 
 
 #_______________________________________________________________________________
-# especificacoes do small-size
+# Descrição do projeto:
+
+# Objetivo: fazer um robô que intercepte a bola a partir de uma posição inicial definida pelo usuário
+# Algorítmo escolhido para realização do trabalho: robô caçador
+
+# Robô escolhido: small-size
 # aceleracao - 2.8 m/s²
 # velocidade - 2.8 m/s
 # raio - 9 cm
 
-# Sua equipe receberá um arquivo chamado trajetoria_bola.dat contendo a posição
-# da bola (coordenadas 𝑥 e 𝑦) a cada 20 ms e uma posição inicial para o robô. 
+# Bola:
+# raio - 2.15 cm
 
-# A posição inicial do robô será sorteada quando sua equipe for
-# demonstrar o funcionamento do programa, mas estará sempre a menos de 1,0 m
-# de distância da posição inicial da bola. Todas as coordenadas serão sempre
-# fornecidas em relação ao sistema de eixos mostrado na figura 2.
+# O arquivo chamado trajetoria.xlsx contem a posição
+# da bola (coordenadas 𝑥 e 𝑦) a cada 0.02s
 
-# campo de futebol de robôs é um retângulo de
+# O campo de futebol de robôs é um retângulo de
 # 9,0 m × 6,0 m, que cada área é um retângulo de 0,5 m × 1,0 m e que as marcas
 # de pênalti ficam a 2,0 m das linhas de fundo
 
@@ -30,8 +33,6 @@
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import random
-import time
 import math
 from funcoes import *
 
@@ -49,9 +50,10 @@ bola = {
 
 robo = {
     "raio": 0.09,
+    "x": [],
+    "y": [],
     "v": [[0, 0]],
     "a": [[0, 0]],
-    "s": [],
 }
 
 # Agora, precisamos extrair os dados da bola do arquivo .xlsx
