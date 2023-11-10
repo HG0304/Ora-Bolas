@@ -8,12 +8,32 @@
 import math
 from ora_bolas import *
 import random
+from time import sleep
 
 # VARIAVEIS GLOBAIS
 instante = 0
 colisao = False
 
 # FUNCOES
+
+def main():
+    print("Seja muito bem vindo ao...")
+    print()
+    sleep(1)
+    print(" ___________________ ")
+    print("|                   |")
+    print("|                   |")
+    print("|    !ORA BOLAS!    |")
+    print("|                   |")
+    print("|___________________|")
+    print()
+    print("Integrantes!")
+    print()
+    print("Bruno Basso")
+    print("Hugo Nomura")
+    print()
+    sleep(1)
+    get_robo_position()
 
 # get_V0x e get_V0y calculam as componentes x e y de um vetor a partir de um modulo e um angulo
 def get_V0x(v0,ang):
@@ -28,7 +48,8 @@ def get_V0y(v0,ang):
 def get_robo_position():
     print("Você gostaria de escolher a posição inicial ou criar uma posição aleatória?")
     print("1) Escolher posição inicial.")
-    choice = int(input("2) Criar posição inicial aletaória."))
+    print("2) Criar posição inicial aletaória.")
+    choice = int(input())
 
     if(choice == 1):
         print()
@@ -42,7 +63,7 @@ def get_robo_position():
         print()
         robo_x = random.randrange(0, 91) / 10
         robo_y = random.randrange(0, 61) / 10
-        robo["s"].append(robo_x)
+        robo["x"].append(robo_x)
         robo["y"].append(robo_y)
         
     else:

@@ -31,29 +31,32 @@
 # CRIAR UM ARQUIVO EXECUTAVEL (VULGO EXE)
 # DEFINIR Vmax E Amax (justificar a resposta)
 
-import matplotlib.pyplot as plt
-import pandas as pd
-import math
-from funcoes import *
+import matplotlib.pyplot as plt # fazer os graficos
+import pandas as pd # manusear .xlsx 
+import math # contas basicas
+from funcoes import * # linkando as funções do nosso outro código
 
+
+
+# OBSERVAÇÃO: veja se o arquivo "trajetoria.xlsx" e o "funcoes.py" está na mesma pasta deste código
 
 # Primeiro, criamos os elementos principais para a funcionalidade do programa
 # utilizamos dicionarios para facilitar a visualização dos dados
 bola = {
-    "raio": 0.0215,
-    "t": [],
-    "x": [],
-    "y": [],
-    "v": [],
-    "a": [],
+    "raio": 0.0215, 
+    "t": [], # tempo
+    "x": [], # posicao x
+    "y": [], # posicao y
+    "v": [], # velocidade
+    "a": [], # aceleração
 }
 
 robo = {
     "raio": 0.09,
-    "x": [],
-    "y": [],
-    "v": [[0, 0]],
-    "a": [[0, 0]],
+    "x": [], # posicao x
+    "y": [], # posicao y
+    "v": [[0, 0]], # velocidade
+    "a": [[0, 0]], # aceleração
 }
 
 # Agora, precisamos extrair os dados da bola do arquivo .xlsx
@@ -65,3 +68,4 @@ bola["t"] = df['t (s)'].tolist()
 bola["x"] = df['x (m)'].tolist()
 bola["y"] = df['y (m)'].tolist()
 
+# main()
