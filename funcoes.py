@@ -11,6 +11,7 @@ import random
 
 # VARIAVEIS GLOBAIS
 instante = 0
+colisao = False
 
 # FUNCOES
 
@@ -122,7 +123,7 @@ def get_a_Robo():
     
     Vmax = 2.8 * 0.02
     ang = get_angulo()
-    vetor_Vmax = [Vmax * math.cos(ang), Vmax * math.sin(ang)] # decomposicao vetorial da velocidade maxima
+    vetor_Vmax = [get_V0x(Vmax, ang), get_V0y(Vmax, ang)] # decomposicao vetorial da velocidade maxima
 
     if(len(robo["a"]) > 0 and mod_Vetor(robo["v"]) < 2.8):
         acelerando = [vetor_Vmax[0] + robo["a"][-1][0], vetor_Vmax[1] + robo["a"][-1][1]] # acelerando o robo
@@ -131,24 +132,39 @@ def get_a_Robo():
         robo["a"].append([0, 0]) # chegou na velocidade maxima e nao acelera mais
 
 # getSpeedRobot(): pega a velocidade do robô.
+# e armazena em robo["v"]
 def get_v_Robo():
     ang = get_angulo()
 
     if(robo["a"][-1] != [0, 0]):
         robo["v"].append([robo["v"][-1][0] + robo["a"][-1][0], robo["v"][-1][1] + robo["a"][-1][1]])
     else: 
-        robo["v"].append([2.8 * math.cos(ang), 2.8 * math.sin(ang)])
+        robo["v"].append([get_V0x(2.8, ang), get_V0y(2.8, ang)])
 
-def get_SpeedBall(): #pega a velocidade da bola
-    return
+# pegando a proxima posicao do robo
+def nextPositionRobo():
+    robo["x"].append(robo["x"][-1] + robo["v"][-1][0])
+    robo["y"].append(robo["y"][-1] + robo["v"][-1][1])
+
+
+
+
 # Para a resolução do problema proposto, utilizaremos uma função para calcular a distancia euclidiana entre a bola e o robo
 # A distancia euclidiana é a distancia entre dois pontos em um plano cartesiano
 # A formula para calcular a distancia euclidiana é:
 # d = sqrt((x2 - x1)^2 + (y2 - y1)^2)
-# Onde x1 e y1 são as coordenadas do ponto 1 e x2 e y2 são as coordenadas do ponto 2
-
-
 def get_dist_euclidiana():
     global instante
-    dist = math.sqrt((bola["x"][instante / 0.02] - robo["x"][instante / 0.02])**2 + (bola["y"] - robo["y"])**2)
-    return dist
+
+    dist_x = bola["x"][instante / 0.02] - robo["x"][-1]
+    dist_y = bola["y"][instante / 0.02] - robo["y"][-1]
+    
+    return math.sqrt(dist_x**2 + dist_y**2)
+
+# Pegando o ponto de interceptação
+
+def getInterceptionPoint():
+    global instante
+    global colisao
+
+    
