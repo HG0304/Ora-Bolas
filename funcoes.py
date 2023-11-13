@@ -187,5 +187,5 @@ def get_dist_euclidiana():
 def getInterceptionPoint():
     global instante
     global colisao
-
+    
     
