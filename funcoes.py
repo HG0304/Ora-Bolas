@@ -68,7 +68,7 @@ def main():
     print()
     sleep(1)
     get_robo_position()
-    
+    att_robo()
     createGraphics()
 
 # get_V0x e get_V0y calculam as componentes x e y de um vetor a partir de um modulo e um angulo
@@ -128,8 +128,8 @@ def get_angulo():
     Quad = 0 # Quadrante
     
     # Calculamos a distancia entre o robo e a bola em x e y
-    dist_x = bola["x"][instante / 0.02] - robo["x"][-1]
-    dist_y = bola["y"][instante / 0.02] - robo["y"][-1]
+    dist_x = bola["x"][int(instante / 0.02)] - robo["x"][-1]
+    dist_y = bola["y"][int(instante / 0.02)] - robo["y"][-1]
 
     # analisamos o quadrante em que o robo está e posteriormente calculamos a tangente inversa
     if dist_x == 0:
@@ -157,7 +157,8 @@ def get_angulo():
         Quad = 4
     
     # Calculamos a tangente inversa
-    else:
+    if(dist_x != 0):
+        tg = 0
         if(Quad == 2 or Quad == 4): # Quadrantes espelhados geometricamente
             tg = abs(dist_x) / abs(dist_y)
         else:
@@ -211,8 +212,8 @@ def nextPositionRobo():
 def get_dist_euclidiana():
     global instante
 
-    dist_x = bola["x"][instante / 0.02] - robo["x"][-1]
-    dist_y = bola["y"][instante / 0.02] - robo["y"][-1]
+    dist_x = bola["x"][int(instante / 0.02)] - robo["x"][-1]
+    dist_y = bola["y"][int(instante / 0.02)] - robo["y"][-1]
     
     return math.sqrt(dist_x**2 + dist_y**2)
 
@@ -222,7 +223,7 @@ def getInterceptionRadius():
     global collision
     global dist_euclidiana
     
-    penetracao = bola["d"] * 0.2
+    penetracao = bola["raio"] * 0.2
 
     dist = get_dist_euclidiana()
     intercept_radius = (robo["raio"] + bola["raio"] - penetracao) / 100
@@ -306,7 +307,7 @@ def createGraphics():
     
     while True:
         print("____________ABA DE GRAFICOS_____________")
-        
+        print()
         print("Qual gráfico você quer ver?")
         print("1 - ROBO")
         print("2 - BOLA")
@@ -327,6 +328,8 @@ def createGraphics():
             choice_var = int(input())
             
             if(choice_var == 1):
+                print(time_interception)
+                print(robo_x2)
                 plt.plot(time_interception, robo_x2)
 
                 # Título e nome dos eixos
