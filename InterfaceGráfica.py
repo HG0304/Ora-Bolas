@@ -21,4 +21,4 @@ l_campo = Label(root,image = imgCampo)
 l_campo.place(x=80,y=55)
 
 
-root.mainloop();
+root.mainloop()
