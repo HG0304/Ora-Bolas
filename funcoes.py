@@ -12,18 +12,17 @@ from time import sleep
 import pandas as pd # manusear .xlsx 
 
 # VARIAVEIS GLOBAIS
+# Estas variaveis serão utilizadas em mais de uma função e por isso foram declaradas como globais
 instante = 0
 colisao = False
 dist_euclidiana = []
-
-
 
 # OBSERVAÇÃO: veja se o arquivo "trajetoria.xlsx" e o "funcoes.py" está na mesma pasta deste código
 
 # Primeiro, criamos os elementos principais para a funcionalidade do programa
 # utilizamos dicionarios para facilitar a visualização dos dados
 bola = {
-    "raio": 0.0215, 
+    "raio": 0.0215, # raio da bola em metros
     "t": [], # tempo
     "x": [], # posicao x
     "y": [], # posicao y
@@ -32,7 +31,7 @@ bola = {
 }
 
 robo = {
-    "raio": 0.09,
+    "raio": 0.09, # raio do robo em metros
     "x": [], # posicao x
     "y": [], # posicao y
     "v": [[0, 0]], # velocidade
@@ -66,10 +65,17 @@ def main():
     print("Bruno Arthur Basso Silva")
     print("Hugo Emilio Nomura")
     print()
-    sleep(1)
-    get_robo_position()
-    att_robo()
-    createGraphics()
+    
+    print(len(bola["x"]))
+    print(len(bola["y"]))
+    print(len(bola["t"]))
+    
+    get_robo_pos()
+    
+    while(colisao == False):
+        att_robo()
+    else:
+        createGraphics()
 
 # get_V0x e get_V0y calculam as componentes x e y de um vetor a partir de um modulo e um angulo
 def get_V0x(v0,ang):
@@ -81,15 +87,15 @@ def get_V0y(v0,ang):
     return v0y
 
 # primeiro, vamos iniciar o programa com uma função que irá carregar os dados do robo
-def get_robo_position():
-    print("Você gostaria de escolher a posição inicial ou criar uma posição aleatória?")
-    print("1) Escolher posição inicial.")
-    print("2) Criar posição inicial aletaória.")
+def get_robo_pos():
+    print('Digite a opção desejada:')
+    print("Você gostaria de escolher a posição inicial ou gerar uma posição aleatória?")
+    print("1 - Escolher posição inicial.")
+    print("2 - Gerar posição inicial aletaória.")
     choice = int(input())
 
     if(choice == 1):
-        print()
-        print("Digite a posição do robô!")
+        print("\nDigite a posição do robô!")
         robo_x = float(input("Digite a posição X: "))
         robo_y = float(input("Digite a posição Y: "))
         robo["x"].append(robo_x)
@@ -104,18 +110,18 @@ def get_robo_position():
         
     else:
         print("Opção inválida.\n")
-        get_robo_position()
+        get_robo_pos()
         
 # Vamos testar se a posição inicial do robo é válida
 def test_robo_position():
     if(robo["x"][0] < 0 or robo["x"][0] > 9):
         print("Posição inicial do robo inválida.\n")
-        get_robo_position()
+        get_robo_pos()
         test_robo_position()
         
     elif(robo["y"][0] < 0 or robo["y"][0] > 6):
         print("Posição inicial do robo inválida.\n")
-        get_robo_position()
+        get_robo_pos()
         test_robo_position()
         
     else:
@@ -123,56 +129,63 @@ def test_robo_position():
         
         
 # Outra funcao importante é a que calcula o angulo entre o robo e a bola
+def calcular_distancia(instante):
+    indice = int(instante / 0.02)
+    dist_x = bola["x"][indice] - robo["x"][-1]
+    dist_y = bola["y"][indice] - robo["y"][-1]
+    return dist_x, dist_y
+
 def get_angulo():
     global instante
-    Quad = 0 # Quadrante
-    
+    PI = math.pi
+    PI_MEIO = PI / 2
+    PI_DOIS = 2 * PI
+    PI_TRES_MEIOS = 3 * PI_MEIO
+
     # Calculamos a distancia entre o robo e a bola em x e y
-    dist_x = bola["x"][int(instante / 0.02)] - robo["x"][-1]
-    dist_y = bola["y"][int(instante / 0.02)] - robo["y"][-1]
+    dist_x, dist_y = calcular_distancia(instante)
 
     # analisamos o quadrante em que o robo está e posteriormente calculamos a tangente inversa
     if dist_x == 0:
         if dist_y > 0:
-            ang = math.pi / 2 # 90 graus
-            return ang
+            return PI_MEIO # 90 graus
         else:
-            ang = 3 * (math.pi / 2) # 270 graus
-            return ang
-    if dist_y == 0:
+            return PI_TRES_MEIOS # 270 graus
+    elif dist_y == 0:
         if dist_x > 0:
-            ang = 0     # 0 graus
-            return ang
+            return 0     # 0 graus
         else:
-            ang = math.pi # 180 graus
-            return ang
+            return PI # 180 graus
+
     # caso o robo não esteja em nenhum dos eixos, ele estará em um dos 4 quadrantes
-    elif dist_x > 0 and dist_y > 0:
-        Quad = 1
+    if dist_x > 0 and dist_y > 0:
+        quadrante = 1
     elif dist_x < 0 and dist_y > 0:
-        Quad = 2
+        quadrante = 2
     elif dist_x < 0 and dist_y < 0:
-        Quad = 3
+        quadrante = 3
     elif dist_x > 0 and dist_y < 0:
-        Quad = 4
-    
+        quadrante = 4
+
     # Calculamos a tangente inversa
     if(dist_x != 0):
-        tg = 0
-        if(Quad == 2 or Quad == 4): # Quadrantes espelhados geometricamente
-            tg = abs(dist_x) / abs(dist_y)
-        else:
-            tg = abs(dist_y) / abs(dist_x)
-
-        tg = math.atan(tg)
-        ang = tg + (Quad - 1) * (math.pi / 2) # usado para ajustar o ângulo com base no quadrante em que ele se encontra
-        return ang
+        tg = abs(dist_y / dist_x) if quadrante in [1, 3] else abs(dist_x / dist_y)
+        angulo = math.atan(tg) + (quadrante - 1) * PI_MEIO # usado para ajustar o ângulo com base no quadrante em que ele se encontra
+        return angulo
 
 # calcula o modulo de um vetor
-def mod_Vetor(vetor):
+def get_mod_vetor(vetor):
     return math.sqrt(vetor[0][0]**2 + vetor[0][1]**2)
 
-# Agora, vamos calcular a aceleracao do robo
+def get_v_Robo():
+    ang = get_angulo()
+
+    if(robo["a"][-1] != [0, 0]):
+        robo["v"].append([robo["v"][-1][0] + robo["a"][-1][0], robo["v"][-1][1] + robo["a"][-1][1]])
+    else: 
+        robo["v"].append([get_V0x(2.8, ang), get_V0y(2.8, ang)])
+
+# Agora, vamos definir a aceleracao do robo
 def get_a_Robo():
     # Para calcularmos a aceleção do robo, precisamos calcular a velocidade maxima do robo
     # Para isso, vamos utilizar a formula da velocidade maxima
@@ -184,26 +197,14 @@ def get_a_Robo():
     vetor_Vmax = [get_V0x(Vmax, ang), get_V0y(Vmax, ang)] # decomposicao vetorial da velocidade maxima
 
     # Caso o robo ainda não tenha atingido a velocidade maxima, ele acelera
-    if(len(robo["a"]) > 0 and mod_Vetor(robo["v"]) < 2.8):
+    if(len(robo["a"]) > 0 and get_mod_vetor(robo["v"]) < 2.8):
         acelerando = [vetor_Vmax[0] + robo["a"][-1][0], vetor_Vmax[1] + robo["a"][-1][1]] # acelerando o robo
         robo["a"].append(acelerando)
     else:
         robo["a"].append([0, 0]) # chegou na velocidade maxima e nao acelera mais
 
-# getSpeedrobo(): pega a velocidade do robô.
-# e armazena em robo["v"]
-def get_v_Robo():
-    ang = get_angulo()
+# Agora, vamos definir a velocidade do robo
 
-    if(robo["a"][-1] != [0, 0]):
-        robo["v"].append([robo["v"][-1][0] + robo["a"][-1][0], robo["v"][-1][1] + robo["a"][-1][1]])
-    else: 
-        robo["v"].append([get_V0x(2.8, ang), get_V0y(2.8, ang)])
-
-# pegando a proxima posicao do robo
-def nextPositionRobo():
-    robo["x"].append(robo["x"][-1] + robo["v"][-1][0])
-    robo["y"].append(robo["y"][-1] + robo["v"][-1][1])
 
 # Para a resolução do problema proposto, utilizaremos uma função para calcular a distancia euclidiana entre a bola e o robo
 # A distancia euclidiana é a distancia entre dois pontos em um plano cartesiano
@@ -212,40 +213,41 @@ def nextPositionRobo():
 def get_dist_euclidiana():
     global instante
 
-    dist_x = bola["x"][int(instante / 0.02)] - robo["x"][-1]
-    dist_y = bola["y"][int(instante / 0.02)] - robo["y"][-1]
+    dist_x, dist_y = calcular_distancia(instante)
     
     return math.sqrt(dist_x**2 + dist_y**2)
 
-# Pegando o ponto de interceptação
-
-def getInterceptionRadius():
-    global collision
+# Pegando o raio de interceptação
+def get_r_interceptacao():
+    global colisao
     global dist_euclidiana
     
-    penetracao = bola["raio"] * 0.2
+    # Margem de erro de 5% do raio da bola
+    penetracao = bola["raio"] * 0.05
 
     dist = get_dist_euclidiana()
-    intercept_radius = (robo["raio"] + bola["raio"] - penetracao) / 100
-
+    intercept_radius = (robo["raio"] + bola["raio"] - penetracao)
+    
     if(dist > intercept_radius):
         dist_euclidiana.append(dist)
 
     else:
         dist_euclidiana.append(dist)
-        collision = True
+        colisao = True
         
 # Função que atualiza a aceleracao, velocidade e posição do robo a cada 0.02s caso não haja colisão
 def att_robo():
     global instante
+    global colisao
     
-    get_dist_euclidiana()
-    getInterceptionRadius()
+    get_r_interceptacao()
     
     if(colisao == False):
-        get_a_Robo()
         get_v_Robo()
-        nextPositionRobo()
+        get_a_Robo()
+        
+        robo["x"].append(robo["x"][-1] + robo["v"][-1][0])
+        robo["y"].append(robo["y"][-1] + robo["v"][-1][1])
         instante += 0.02
 
 # APROFUNDAMENTO! - Função que anima os vetores da bola e do robo na GUI
@@ -314,7 +316,7 @@ def createGraphics():
         print("3 - BOLA / ROBO")
         print("0 - Sair")
         
-        choice_obj = int(input())
+        choice_obj = int(input("-> "))
         
         if(choice_obj == 1):
             print("Qual varivel você quer analisar do ROBO?")
@@ -325,7 +327,7 @@ def createGraphics():
             print("5 - Vy")
             print("6 - ay")
             
-            choice_var = int(input())
+            choice_var = int(input("-> "))
             
             if(choice_var == 1):
                 print(time_interception)
