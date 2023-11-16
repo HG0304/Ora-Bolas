@@ -133,6 +133,7 @@ def calcular_distancia(instante):
     indice = int(instante / 0.02)
     dist_x = bola["x"][indice] - robo["x"][-1]
     dist_y = bola["y"][indice] - robo["y"][-1]
+    print("I:",indice)
     return dist_x, dist_y
 
 def get_angulo():
@@ -179,7 +180,9 @@ def get_mod_vetor(vetor):
 
 def get_v_Robo():
     ang = get_angulo()
-
+    print("V")
+    print("Robo X: ",robo["v"][-1][0])
+    print("Robo Y: ",robo["v"][-1][1])    
     if(robo["a"][-1] != [0, 0]):
         robo["v"].append([robo["v"][-1][0] + robo["a"][-1][0], robo["v"][-1][1] + robo["a"][-1][1]])
     else: 
@@ -194,6 +197,9 @@ def get_a_Robo():
     
     Vmax = 2.8 * 0.02
     ang = get_angulo()
+    print("A")
+    print("Robo x: ",robo["a"][-1][0])
+    print("Robo y: ",robo["a"][-1][1])
     vetor_Vmax = [get_V0x(Vmax, ang), get_V0y(Vmax, ang)] # decomposicao vetorial da velocidade maxima
 
     # Caso o robo ainda não tenha atingido a velocidade maxima, ele acelera
@@ -214,7 +220,7 @@ def get_dist_euclidiana():
     global instante
 
     dist_x, dist_y = calcular_distancia(instante)
-    
+    print
     return math.sqrt(dist_x**2 + dist_y**2)
 
 # Pegando o raio de interceptação
@@ -222,17 +228,21 @@ def get_r_interceptacao():
     global colisao
     global dist_euclidiana
     
-    # Margem de erro de 5% do raio da bola
-    penetracao = bola["raio"] * 0.05
+    # Margem de erro de 20% do raio da bola
+    porcentagem = (bola["raio"] * 2) * 0.2
 
     dist = get_dist_euclidiana()
-    intercept_radius = (robo["raio"] + bola["raio"] - penetracao)
+    intercept_radius = (robo["raio"] + (bola["raio"] - porcentagem))
+    print("Dist: ",dist)
+    print(intercept_radius)
+
     
     if(dist > intercept_radius):
         dist_euclidiana.append(dist)
-
+        
     else:
         dist_euclidiana.append(dist)
+        print("A")
         colisao = True
         
 # Função que atualiza a aceleracao, velocidade e posição do robo a cada 0.02s caso não haja colisão
@@ -248,7 +258,9 @@ def att_robo():
         
         robo["x"].append(robo["x"][-1] + robo["v"][-1][0])
         robo["y"].append(robo["y"][-1] + robo["v"][-1][1])
+        
         instante += 0.02
+
 
 # APROFUNDAMENTO! - Função que anima os vetores da bola e do robo na GUI
 def Animando_vetores():
