@@ -224,7 +224,7 @@ def get_r_interceptacao():
     porcentagem = bola["raio"] * 2 * 0.2
 
     dist = get_dist_euclidiana()
-    intercept_radius = (robo["raio"] + bola["raio"] + porcentagem)
+    intercept_radius = (robo["raio"] + (bola["raio"]) - porcentagem)
     
     print(dist)
 
@@ -235,22 +235,26 @@ def get_r_interceptacao():
         dist_euclidiana.append(dist)
         colisao = True
         
+
 # Função que atualiza a aceleracao, velocidade e posição do robo a cada 0.02s caso não haja colisão
 def att_robo():
-    sleep(0.5)
+    sleep(0.02)
     global instante
     global colisao
     
-    get_dist_euclidiana()
+    dist = get_dist_euclidiana()
     get_r_interceptacao()
 
     
     if(colisao == False):
         get_a_Robo()
         get_v_Robo()
+        if(dist < 1):
+            
         
         robo["x"].append(robo["x"][-1] + robo["v"][-1][0])
         robo["y"].append(robo["y"][-1] + robo["v"][-1][1])
+            
         
         instante += 0.02
 
@@ -357,7 +361,7 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
             elif(choice_var == 3):
                 plt.plot(time_interception, robo_ax)
 
@@ -368,7 +372,7 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
             elif(choice_var == 4):
                 plt.plot(time_interception, robo_y2)
 
@@ -379,7 +383,7 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
             elif(choice_var == 5):
                 plt.plot(time_interception, robo_vy)
 
@@ -390,7 +394,7 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
             elif(choice_var == 6):
                 plt.plot(time_interception, robo_ay)
 
@@ -401,7 +405,7 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
         
         elif(choice_obj == 2):
             print("Qual varivel você quer analisar da BOLA?")
@@ -423,7 +427,7 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
             elif(choice_var == 2):
                 plt.plot(time_interception, bola_vx)
 
@@ -434,7 +438,7 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
             elif(choice_var == 3):
                 plt.plot(time_interception, bola_ay)
 
@@ -445,7 +449,7 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
             elif(choice_var == 4):
                 plt.plot(time_interception, bola_y2)
 
@@ -456,7 +460,7 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
             elif(choice_var == 5):
                 plt.plot(time_interception, bola_vy)
 
@@ -467,7 +471,7 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
             elif(choice_var == 6):
                 plt.plot(time_interception, bola_ay)
 
@@ -478,13 +482,13 @@ def createGraphics():
 
                 # Mostra o gráfico
                 plt.show()
-                return
+                
         elif(choice_obj == 3):
             plt.plot(robo_x2, robo_y2)
             plt.plot(bola_x2, bola_y2)
-            plt.plot(bola["x"], bola["y"], 'r--')
-            plt.plot(robo_x2[-1], robo_y2[-1], 'ro')
-            plt.plot(bola_x2[-1], bola_y2[-1], 'ro')
+            # plt.plot(bola["x"], bola["y"], 'r--')
+            plt.plot(robo_x2[-1], robo_y2[-1], 'k')
+            plt.plot(bola_x2[-1], bola_y2[-1], 'b')
 
             # Título e nome dos eixos
             plt.title("Gráfico da trajetória da bola e do robô.")
@@ -493,8 +497,9 @@ def createGraphics():
 
             # Mostra o gráfico
             plt.show()
-            return
+            
         elif(choice_obj == 0):
+            print("Obrigado por usar os serviços da OrangoCorps!")
             break
         else:
             print("Opção inválida.")
