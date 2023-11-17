@@ -260,7 +260,7 @@ def createGraphics(robo,bola,dist_euclidiana):
             # Título e nome dos eixos
             plt.title("Gráfico da distancia entre o Robo e a Bola pelo Tempo.")
             plt.xlabel("Tempo (t)")
-            plt.ylabel("Distância")
+            plt.ylabel("Distância (m)")
 
             # Mostra o gráfico
             plt.show()
