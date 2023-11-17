@@ -182,21 +182,20 @@ def get_v_Robo():
         robo["v"].append([get_V0x(2.8, ang), get_V0y(2.8, ang)])
 
 # Agora, vamos definir a aceleracao do robo
-def get_a_Robo():
+def get_a_Robo(velocidade):
     # Para calcularmos a aceleção do robo, precisamos calcular a velocidade maxima do robo
     # Para isso, vamos utilizar a formula da velocidade maxima
     # Vmax = Amax * t
     # Pelos dados fornecidos, sabemos que a aceleracao maxima do robo é 2.8 m/s² e que o tempo é atualizado a cada 0.02s
-    
-    Vmax = 2.8 * 0.02
+
     ang = get_angulo()
     
-    vetor_Vmax = [get_V0x(Vmax, ang), get_V0y(Vmax, ang)] # decomposicao vetorial da velocidade maxima
+    vetor_V = [get_V0x(velocidade, ang), get_V0y(velocidade, ang)] # decomposicao vetorial da velocidade maxima
 
     # Caso o robo ainda não tenha atingido a velocidade maxima, ele acelera
     
     if(get_mod_vetor(robo["v"]) < 2.8):
-        acelerando = [vetor_Vmax[0] + robo["a"][-1][0], vetor_Vmax[1] + robo["a"][-1][1]] # acelerando o robo
+        acelerando = [vetor_V[0] + robo["a"][-1][0], vetor_V[1] + robo["a"][-1][1]] # acelerando o robo
         robo["a"].append(acelerando)
     else:
         robo["a"].append([0, 0]) # chegou na velocidade maxima e nao acelera mais
@@ -247,15 +246,19 @@ def att_robo():
 
     
     if(colisao == False):
-        get_a_Robo()
-        get_v_Robo()
+        Vmax = 2.8 * 0.02
         if(dist < 1):
-            
+            v = 1 * 0.02
+            get_a_Robo(v)
+            get_v_Robo()
+        
+        else:
+            get_a_Robo(Vmax)
+            get_v_Robo()
         
         robo["x"].append(robo["x"][-1] + robo["v"][-1][0])
         robo["y"].append(robo["y"][-1] + robo["v"][-1][1])
             
-        
         instante += 0.02
 
 
