@@ -286,3 +286,4 @@ def Animando_vetores():
         bola["v"].append([(bola["x"][i + 1] - bola["x"][i]) / time_gap, (bola["y"][i + 1] - bola["y"][i]) / time_gap])
         bola["a"].append([(bola["v"][i][0] - bola["v"][i - 1][0]) / time_gap, (bola["v"][i][1] - bola["v"][i - 1][1]) / time_gap])
 
+
