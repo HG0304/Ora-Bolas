@@ -49,7 +49,10 @@ bola["t"] = df['t (s)'].tolist()
 bola["x"] = df['x (m)'].tolist()
 bola["y"] = df['y (m)'].tolist()
 
+
+
 # FUNCOES
+
 
 def main():
     print("Seja muito bem vindo ao...")
@@ -77,6 +80,7 @@ def main():
     while not colisao:
         att_robo()
     else:
+        Animando_vetores(robo,bola)
         GUI_campo(robo,bola)
         createGraphics(robo,bola)
 
@@ -93,15 +97,15 @@ def get_robo_pos():
     print()
     print("1 - Escolher posição inicial.")
     print("2 - Gerar posição inicial aleatória.")
-    choice = int(input("-> "))
+    choice = int(input("--> "))
 
     if(choice == 1):
         print("\nDigite a posição do robô!")
         print()
         print("Posição X:")
-        robo_x = float(input("-> "))
+        robo_x = float(input("--> "))
         print("Posição Y:")
-        robo_y = float(input("-> "))
+        robo_y = float(input("--> "))
         robo["x"].append(robo_x)
         robo["y"].append(robo_y)
 
@@ -271,19 +275,14 @@ def att_robo():
 
 
 # APROFUNDAMENTO! - Função que anima os vetores da bola e do robo na GUI
-def Animando_vetores():
-    temp_intercept = []
+# uma vez que temos o tempo de interceptação atraves do tamanho da lista do robo["x"],
+# podemos calcular a velocidade e a aceleração da bola para cada intevalo de tempo
+# antes do ponto de interceptacao
+
+def Animando_vetores(robo,bola):
 
     for i in range(len(robo["x"])):
-        temp_intercept.append(bola["t"][i])
-
-    for i in range(len(temp_intercept)):
         time_gap = 0.02
         
-        if bola["t"][i + 1] % 0.02 != 0:
-            time_gap = bola["t"][i + 1] - bola["t"][i]
-
         bola["v"].append([(bola["x"][i + 1] - bola["x"][i]) / time_gap, (bola["y"][i + 1] - bola["y"][i]) / time_gap])
         bola["a"].append([(bola["v"][i][0] - bola["v"][i - 1][0]) / time_gap, (bola["v"][i][1] - bola["v"][i - 1][1]) / time_gap])
-
-

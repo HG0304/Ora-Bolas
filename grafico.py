@@ -62,7 +62,7 @@ def createGraphics(robo,bola):
             print("5 - Vy")
             print("6 - ay")
             
-            choice_var = int(input("-> "))
+            choice_var = int(input("--> "))
             
             if(choice_var == 1):
                 ax = plt.axes() 
