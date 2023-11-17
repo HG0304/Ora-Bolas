@@ -220,10 +220,10 @@ def get_r_interceptacao():
     global dist_euclidiana
     
     # Margem de erro de 20% do diametro da bola
-    porcentagem = bola["raio"] * 2 * 0.2
+    porcentagem = bola["raio"] * 2 * 0.2 # valor esperado de saida 0.0086 m
 
     dist = get_dist_euclidiana()
-    intercept_radius = (robo["raio"] + (bola["raio"]) - porcentagem)
+    intercept_radius = (robo["raio"] + bola["raio"] - porcentagem) # RI = 0.1029 m
     
     print(dist)
 
@@ -247,17 +247,13 @@ def att_robo():
     
     if(colisao == False):
         Vmax = 2.8 * 0.02
-        if(dist < 1):
-            v = 1 * 0.02
-            get_a_Robo(v)
-            get_v_Robo()
         
-        else:
-            get_a_Robo(Vmax)
-            get_v_Robo()
+        get_a_Robo(Vmax)
+        get_v_Robo()
         
-        robo["x"].append(robo["x"][-1] + robo["v"][-1][0])
-        robo["y"].append(robo["y"][-1] + robo["v"][-1][1])
+        # atualiza posicao do robo
+        robo["x"].append(robo["x"][-1] + robo["v"][-1][0] * 0.02)
+        robo["y"].append(robo["y"][-1] + robo["v"][-1][1] * 0.02)
             
         instante += 0.02
 
@@ -347,9 +343,9 @@ def createGraphics():
                 plt.plot(time_interception, robo_x2)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico das coordenadas X do robô em função do tempo.")
+                plt.title("Gráfico da posição X do robô pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("X")
+                plt.ylabel("X (m)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -358,9 +354,9 @@ def createGraphics():
                 plt.plot(time_interception, robo_vx)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico de velocidade em X do robô em função do tempo.")
+                plt.title("Gráfico da velocidade X do robô pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("VX")
+                plt.ylabel("VX (m/s)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -369,9 +365,9 @@ def createGraphics():
                 plt.plot(time_interception, robo_ax)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico da aceleração em X do robô em função do tempo.")
+                plt.title("Gráfico da aceleração X do robô pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("AX")
+                plt.ylabel("AX (m/s^2)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -380,9 +376,9 @@ def createGraphics():
                 plt.plot(time_interception, robo_y2)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico das coordenadas Y do robô em função do tempo.")
+                plt.title("Gráfico da posição Y do robô pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("Y")
+                plt.ylabel("Y (m)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -391,9 +387,9 @@ def createGraphics():
                 plt.plot(time_interception, robo_vy)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico de velocidade em Y do robô em função do tempo.")
+                plt.title("Gráfico da velocidade Y do robô pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("VY")
+                plt.ylabel("VY (m/s)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -402,9 +398,9 @@ def createGraphics():
                 plt.plot(time_interception, robo_ay)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico da aceleração em Y do robô em função do tempo.")
+                plt.title("Gráfico da aceleração Y do robô pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("AY")
+                plt.ylabel("AY (m/s^2)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -424,9 +420,9 @@ def createGraphics():
                 plt.plot(time_interception, bola_x2)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico das coordenadas X da bola em função do tempo.")
+                plt.title("Gráfico da posição X da bola pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("X")
+                plt.ylabel("X (m)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -435,9 +431,9 @@ def createGraphics():
                 plt.plot(time_interception, bola_vx)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico de velocidade em X da bola em função do tempo.")
+                plt.title("Gráfico da velocidade X da bola pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("VX")
+                plt.ylabel("VX (m/s)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -446,9 +442,9 @@ def createGraphics():
                 plt.plot(time_interception, bola_ay)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico da aceleração em Y da bola em função do tempo.")
+                plt.title("Gráfico da aceleração Y da bola pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("AY")
+                plt.ylabel("AY (m/s^2)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -457,9 +453,9 @@ def createGraphics():
                 plt.plot(time_interception, bola_y2)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico das coordenadas Y da bola em função do tempo.")
+                plt.title("Gráfico da posição Y da bola pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("Y")
+                plt.ylabel("Y (m)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -468,9 +464,9 @@ def createGraphics():
                 plt.plot(time_interception, bola_vy)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico de velocidade em Y da bola em função do tempo.")
+                plt.title("Gráfico da velocidade Y da bola pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("VY")
+                plt.ylabel("VY (m/s)")
 
                 # Mostra o gráfico
                 plt.show()
@@ -479,22 +475,22 @@ def createGraphics():
                 plt.plot(time_interception, bola_ay)
 
                 # Título e nome dos eixos
-                plt.title("Gráfico da aceleração em Y da bola em função do tempo.")
+                plt.title("Gráfico da aceleração Y da bola pelo tempo.")
                 plt.xlabel("Tempo (t)")
-                plt.ylabel("AY")
+                plt.ylabel("AY (m/s^2)")
 
                 # Mostra o gráfico
                 plt.show()
                 
         elif(choice_obj == 3):
-            plt.plot(robo_x2, robo_y2)
-            plt.plot(bola_x2, bola_y2)
+            plt.plot(robo_x2, robo_y2, label="robô", color='k',linestyle=":")
+            plt.plot(bola_x2, bola_y2, label="bola", color='b',linestyle="--")
             # plt.plot(bola["x"], bola["y"], 'r--')
-            plt.plot(robo_x2[-1], robo_y2[-1], 'k')
-            plt.plot(bola_x2[-1], bola_y2[-1], 'b')
+            plt.plot(robo_x2[-1], robo_y2[-1])
+            plt.plot(bola_x2[-1], bola_y2[-1])
 
             # Título e nome dos eixos
-            plt.title("Gráfico da trajetória da bola e do robô.")
+            plt.title("Gráfico da trajetória da bola e do robô no campo.")
             plt.xlabel("X")
             plt.ylabel("Y")
 
