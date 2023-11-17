@@ -1,7 +1,8 @@
 # Nome: Bruno Arthur Basso Silva RA: 22.222.067-5
 # Nome: Hugo Emilio Nomura RA: 22.123.051-9
 
-# Professora: Simone
+# Materia: CF2111 - INTRODUÇAO A FISICA CLASSICA
+# Professora: Simone Camargo Trippe
 
 # Este arquivo contem todas as funções que serão utilizadas no programa principal
 
@@ -18,8 +19,6 @@ from GUI import *
 instante = 0
 colisao = False
 dist_euclidiana = []
-
-# OBSERVAÇÃO: veja se o arquivo "trajetoria.xlsx" e o "funcoes.py" está na mesma pasta deste código
 
 # Primeiro, criamos os elementos principais para a funcionalidade do programa
 # utilizamos dicionarios para facilitar a visualização dos dados
@@ -49,10 +48,7 @@ bola["t"] = df['t (s)'].tolist()
 bola["x"] = df['x (m)'].tolist()
 bola["y"] = df['y (m)'].tolist()
 
-
-
 # FUNCOES
-
 
 def main():
     print("Seja muito bem vindo ao...")
@@ -79,10 +75,10 @@ def main():
     
     while not colisao:
         att_robo()
-    else:
-        Animando_vetores(robo,bola)
-        instanciarJanela(robo,bola)
-        createGraphics(robo,bola,dist_euclidiana)
+    
+    Animando_vetores(robo,bola)
+    instanciarJanela(robo,bola)
+    createGraphics(robo,bola,dist_euclidiana)
 
 # get_V0x e get_V0y calculam as componentes x e y de um vetor a partir de um modulo e um angulo
 def get_V0x(v0,ang): 
@@ -130,13 +126,10 @@ def test_robo_position():
     elif(robo["y"][-1] < 0 or robo["y"][-1] > 6):
         print("Posição Y do robo inválida.\n")
         get_robo_pos()
-        test_robo_position()
-        
-        
-     
-        
+        test_robo_position() 
         
 # Outra funcao importante é a que calcula o angulo entre o robo e a bola
+# Para isso, vamos cacular a distancia nos eixos entre a bola e robo
 def calcular_distancia(instante):
     indice = int(instante / 0.02)
     dist_x = bola["x"][indice] - robo["x"][-1]
@@ -155,14 +148,14 @@ def get_angulo():
     # analisamos o quadrante em que o robo está e posteriormente calculamos a tangente inversa
     if dist_x == 0:
         if dist_y > 0:
-            return PI_MEIO # 90 graus
+            return PI_MEIO # 90 graus / O robo esta em cima da da bola
         else:
-            return PI_TRES_MEIOS # 270 graus
+            return PI_TRES_MEIOS # 270 graus / O robo esta embaixo da da bola
     elif dist_y == 0:
         if dist_x > 0:
-            return 0     # 0 graus
+            return 0     # 0 graus / O Robo esta à direta da bola
         else:
-            return PI # 180 graus
+            return PI # 180 graus / O Robo esta à esquerda da bola
 
     # caso o robo não esteja em nenhum dos eixos, ele estará em um dos 4 quadrantes
     if dist_x > 0 and dist_y > 0:
@@ -183,12 +176,15 @@ def get_angulo():
         return angulo
 
 
-
+# Para adicionar a velocidade do robo conforme a aceleracao, temos:
 def get_v_Robo():
     ang = get_angulo()
-       
+
+    # Caso haja aceleraçao
     if(robo["a"][-1] != [0, 0]):
+        # Somamos a ultima velocidade registrada com a ultima aceleracao resgistrada nos eixos respectivamente
         robo["v"].append([robo["v"][-1][0] + robo["a"][-1][0], robo["v"][-1][1] + robo["a"][-1][1]])
+    # Caso nao haja aceleraçao
     else:
         robo["v"].append([get_V0x(2.8, ang), get_V0y(2.8, ang)])
 
@@ -197,25 +193,18 @@ def get_a_Robo(velocidade):
     # calcula o modulo de um vetor
     def get_mod_vetor(vetor):
         return math.sqrt(vetor[-1][0]**2 + vetor[-1][1]**2)
-    # Para calcularmos a aceleção do robo, precisamos calcular a velocidade maxima do robo
-    # Para isso, vamos utilizar a formula da velocidade maxima
-    # Vmax = Amax * t
-    # Pelos dados fornecidos, sabemos que a aceleracao maxima do robo é 2.8 m/s² e que o tempo é atualizado a cada 0.02s
-
+    
+    # Para calcularmos a aceleção do robo, precisamos calcular a velocidade em relação a aceleracao do robo
     ang = get_angulo()
     
-    vetor_V = [get_V0x(velocidade, ang), get_V0y(velocidade, ang)] # decomposicao vetorial da velocidade maxima
+    vetor_V = [get_V0x(velocidade, ang), get_V0y(velocidade, ang)] # decomposicao vetorial da velocidade
 
     # Caso o robo ainda não tenha atingido a velocidade maxima, ele acelera
-    
     if(get_mod_vetor(robo["v"]) < 2.8):
         acelerando = [vetor_V[0] + robo["a"][-1][0], vetor_V[1] + robo["a"][-1][1]] # acelerando o robo
         robo["a"].append(acelerando)
     else:
         robo["a"].append([0, 0]) # chegou na velocidade maxima e nao acelera mais
-
-# Agora, vamos definir a velocidade do robo
-
 
 # Para a resolução do problema proposto, utilizaremos uma função para calcular a distancia euclidiana entre a bola e o robo
 # A distancia euclidiana é a distancia entre dois pontos em um plano cartesiano
@@ -225,30 +214,30 @@ def get_dist_euclidiana():
     global instante
 
     dist_x, dist_y = calcular_distancia(instante)
-    
     return math.sqrt(dist_x**2 + dist_y**2)
 
-# Pegando o raio de interceptação
+# Para que o programa saiba quando ele precisa parar de rodar, precisamos definir quando ocorrerá o impacto entre o robo e a bola
 def get_r_interceptacao():
     global colisao
     global dist_euclidiana
     
-    # Margem de erro de 20% do diametro da bola
+    # Margem de erro de 20% do diametro da bola, definido na primeira apresentação
     porcentagem = bola["raio"] * 2 * 0.2 # valor esperado de saida 0.0086 m
 
     dist = get_dist_euclidiana()
-    intercept_radius = (robo["raio"] + bola["raio"] - porcentagem) # RI = 0.1029 m
+    raio_interceptacao = (robo["raio"] + bola["raio"] - porcentagem) # RI = 0.1029 m
     
-    
-    
+    # Estamos printando as distancias para uma melhor UX
     print(dist)
 
-    if(dist > intercept_radius):
+    # Caso a distancia euclidiana seja maior que o raio de interceptacao o nosso programa entende que o robo nao 
+    # alcançou a bola e adiciona os valores de distancia em uma lista para a criacao dos graficos posteriormente
+    if(dist > raio_interceptacao):
         dist_euclidiana.append(dist)
         
-    elif(dist <= intercept_radius):
+    else:
         dist_euclidiana.append(dist)
-        colisao = True
+        colisao = True                  # Encerra os calculos de cinematica
         
 
 # Função que atualiza a aceleracao, velocidade e posição do robo a cada 0.02s caso não haja colisão
@@ -257,13 +246,14 @@ def att_robo():
     global instante
     global colisao
     
-    dist = get_dist_euclidiana()
+    # Chamamos para checar o raio de interceptacao
     get_r_interceptacao()
 
-    
     if(colisao == False):
+        # Velocidade maxima segundo as especificacoes do robo Small-Size
         Vmax = 2.8 * 0.02
         
+        # atualizando os valores de V e A
         get_a_Robo(Vmax)
         get_v_Robo()
         
@@ -283,6 +273,6 @@ def Animando_vetores(robo,bola):
 
     for i in range(len(robo["x"])):
         time_gap = 0.02
-        # a biblioteca numpy faz integral e derivada, da uma olhada ai
+
         bola["v"].append([(bola["x"][i + 1] - bola["x"][i]) / time_gap, (bola["y"][i + 1] - bola["y"][i]) / time_gap])
         bola["a"].append([(bola["v"][i][0] - bola["v"][i - 1][0]) / time_gap, (bola["v"][i][1] - bola["v"][i - 1][1]) / time_gap])

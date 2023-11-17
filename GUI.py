@@ -113,10 +113,10 @@ def GUI_campo(robo, bola,janela,root):
         
         v_v_bola = math.sqrt((bola["v"][contador][0] ** 2) + (bola["v"][contador][1] ** 2))
         v_a_bola = math.sqrt((bola["a"][contador][0] ** 2) + (bola["a"][contador][1] ** 2))
-        legenda_vetor_v_robo = Label(root, text=f"Velocidade Robo: {v_v_robo:.2f} ", font=("Times New Roman", "12", "bold"), fg="black")
-        legenda_vetor_a_robo = Label(root, text=f"Aceleração Robo: {v_a_robo:.2f} ", font=("Times New Roman", "12", "bold"), fg="black")
-        legenda_vetor_v_bola = Label(root, text=f"Velocidade Bola: {v_v_bola:.2f} ", font=("Times New Roman", "12", "bold"), fg="red")
-        legenda_vetor_a_bola = Label(root, text=f"Aceleração bola: {v_a_bola:.2f} ", font=("Times New Roman", "12", "bold"), fg="red")
+        legenda_vetor_v_robo = Label(root, text=f"Velocidade: {v_v_robo:.2f} ", font=("Times New Roman", "12", "bold"), fg="black")
+        legenda_vetor_a_robo = Label(root, text=f"Aceleração: {v_a_robo:.2f} ", font=("Times New Roman", "12", "bold"), fg="black")
+        legenda_vetor_v_bola = Label(root, text=f"Velocidade: {v_v_bola:.2f} ", font=("Times New Roman", "12", "bold"), fg="red")
+        legenda_vetor_a_bola = Label(root, text=f"Aceleração: {v_a_bola:.2f} ", font=("Times New Roman", "12", "bold"), fg="red")
         legenda_vetor = Label(root,text="VETORES!", font=("Times New Roman", "20","bold"), fg="grey")
         for i in range(0, contador, 2):
             # desenhando as linhas de trajetoria tanto do robo quanto da bola
