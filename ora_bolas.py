@@ -2,7 +2,7 @@
 # Nome: Bruno Arthur Basso Silva RA: 22.222.067-5
 # Nome: Hugo Emilio Nomura RA: 22.123.051-9
 
-# Professora: Simone
+# Professora: Simone Camargo Trippe
 
 
 #_______________________________________________________________________________
