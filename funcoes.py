@@ -81,7 +81,7 @@ def main():
         att_robo()
     else:
         Animando_vetores(robo,bola)
-        GUI_campo(robo,bola)
+        instanciarJanela(robo,bola)
         createGraphics(robo,bola)
 
 # get_V0x e get_V0y calculam as componentes x e y de um vetor a partir de um modulo e um angulo
