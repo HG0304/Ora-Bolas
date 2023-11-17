@@ -82,7 +82,7 @@ def main():
     else:
         Animando_vetores(robo,bola)
         instanciarJanela(robo,bola)
-        createGraphics(robo,bola)
+        createGraphics(robo,bola,dist_euclidiana)
 
 # get_V0x e get_V0y calculam as componentes x e y de um vetor a partir de um modulo e um angulo
 def get_V0x(v0,ang): 
@@ -147,7 +147,6 @@ def get_angulo():
     global instante
     PI = math.pi
     PI_MEIO = PI / 2
-    PI_DOIS = 2 * PI
     PI_TRES_MEIOS = 3 * PI_MEIO
 
     # Calculamos a distancia entre o robo e a bola em x e y
@@ -183,9 +182,7 @@ def get_angulo():
         angulo = math.atan(tg) + (quadrante - 1) * PI_MEIO 
         return angulo
 
-# calcula o modulo de um vetor
-def get_mod_vetor(vetor):
-    return math.sqrt(vetor[-1][0]**2 + vetor[-1][1]**2)
+
 
 def get_v_Robo():
     ang = get_angulo()
@@ -197,6 +194,9 @@ def get_v_Robo():
 
 # Agora, vamos definir a aceleracao do robo
 def get_a_Robo(velocidade):
+    # calcula o modulo de um vetor
+    def get_mod_vetor(vetor):
+        return math.sqrt(vetor[-1][0]**2 + vetor[-1][1]**2)
     # Para calcularmos a aceleção do robo, precisamos calcular a velocidade maxima do robo
     # Para isso, vamos utilizar a formula da velocidade maxima
     # Vmax = Amax * t
@@ -283,6 +283,6 @@ def Animando_vetores(robo,bola):
 
     for i in range(len(robo["x"])):
         time_gap = 0.02
-        
+        # a biblioteca numpy faz integral e derivada, da uma olhada ai
         bola["v"].append([(bola["x"][i + 1] - bola["x"][i]) / time_gap, (bola["y"][i + 1] - bola["y"][i]) / time_gap])
         bola["a"].append([(bola["v"][i][0] - bola["v"][i - 1][0]) / time_gap, (bola["v"][i][1] - bola["v"][i - 1][1]) / time_gap])

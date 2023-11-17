@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt # para criar os gráficos
 
-def createGraphics(robo,bola):
+def createGraphics(robo,bola,dist_euclidiana):
     robo_x2 = []
     robo_y2 = []
     robo_vx = []
@@ -47,6 +47,7 @@ def createGraphics(robo,bola):
         print("1 - ROBO")
         print("2 - BOLA")
         print("3 - BOLA / ROBO")
+        print("4 - DISTANCIA ""D"" ENTRE O ROBO E A BOLA PELO TEMPO")
         print("0 - Sair") 
         
         choice_obj = int(input("-> "))
@@ -251,6 +252,19 @@ def createGraphics(robo,bola):
 
             # Mostra o gráfico
             plt.show()
+        elif(choice_obj == 4):
+            ax = plt.axes() 
+            ax.set_facecolor("grey")
+            plt.plot(time_interception,dist_euclidiana, color="w", linestyle="-.", label="Distância D")
+            plt.legend()
+            # Título e nome dos eixos
+            plt.title("Gráfico da velocidade Y da bola pelo tempo.")
+            plt.xlabel("Tempo (t)")
+            plt.ylabel("Distância")
+
+            # Mostra o gráfico
+            plt.show()
+            
             
         elif(choice_obj == 0):
             print("Obrigado por usar os serviços da OrangoCorps!")
