@@ -10,6 +10,7 @@ import math
 import random
 from time import sleep
 import pandas as pd # manusear .xlsx 
+from grafico import createGraphics # puxando os graficos do outro codigo
 
 # VARIAVEIS GLOBAIS
 # Estas variaveis serão utilizadas em mais de uma função e por isso foram declaradas como globais
@@ -51,27 +52,31 @@ bola["y"] = df['y (m)'].tolist()
 
 def main():
     print("Seja muito bem vindo ao...")
-    print()
-    sleep(1)
+    sleep(0.5)
     print(" ___________________ ")
     print("|                   |")
     print("|                   |")
-    print("|    !ORA BOLAS!    |")
+    print("|     ORA BOLAS     |")
     print("|                   |")
     print("|___________________|")
     print()
     print("Integrantes!")
-    print()
-    print("Bruno Arthur Basso Silva")
-    print("Hugo Emilio Nomura")
-    print()
+    print("- Bruno Arthur Basso Silva")
+    print("- Hugo Emilio Nomura")
     
     get_robo_pos()
+    test_robo_position()
+    sleep(1)
+    print("Calculando...")
+    sleep(1)
+    print("Veja a distância do robô se aproximando da bola...")
+    sleep(1.8)
+    print()
     
-    while(colisao == False):
+    while not colisao:
         att_robo()
     else:
-        createGraphics()
+        createGraphics(robo,bola)
 
 # get_V0x e get_V0y calculam as componentes x e y de um vetor a partir de um modulo e um angulo
 def get_V0x(v0,ang): 
@@ -82,16 +87,19 @@ def get_V0y(v0,ang):
 
 # primeiro, vamos iniciar o programa com uma função que irá carregar os dados do robo
 def get_robo_pos():
-    print('Digite a opção desejada:')
-    print("Você gostaria de escolher a posição inicial ou gerar uma posição aleatória?")
+    print('\nDigite a opção desejada:')
+    print()
     print("1 - Escolher posição inicial.")
     print("2 - Gerar posição inicial aletaória.")
-    choice = int(input())
+    choice = int(input("-> "))
 
     if(choice == 1):
         print("\nDigite a posição do robô!")
-        robo_x = float(input("Digite a posição X: "))
-        robo_y = float(input("Digite a posição Y: "))
+        print()
+        print("Posição X:")
+        robo_x = float(input("-> "))
+        print("Posição Y:")
+        robo_y = float(input("-> "))
         robo["x"].append(robo_x)
         robo["y"].append(robo_y)
 
@@ -108,18 +116,18 @@ def get_robo_pos():
         
 # Vamos testar se a posição inicial do robo é válida
 def test_robo_position():
-    if(robo["x"][0] < 0 or robo["x"][0] > 9):
-        print("Posição inicial do robo inválida.\n")
+    if(robo["x"][-1] < 0 or robo["x"][-1] > 9):
+        print("Posição X do robo inválida.\n")
         get_robo_pos()
         test_robo_position()
         
-    elif(robo["y"][0] < 0 or robo["y"][0] > 6):
-        print("Posição inicial do robo inválida.\n")
+    elif(robo["y"][-1] < 0 or robo["y"][-1] > 6):
+        print("Posição Y do robo inválida.\n")
         get_robo_pos()
         test_robo_position()
         
-    else:
-        print("Posição inicial do robo válida.\n")
+        
+     
         
         
 # Outra funcao importante é a que calcula o angulo entre o robo e a bola
@@ -225,6 +233,8 @@ def get_r_interceptacao():
     dist = get_dist_euclidiana()
     intercept_radius = (robo["raio"] + bola["raio"] - porcentagem) # RI = 0.1029 m
     
+    
+    
     print(dist)
 
     if(dist > intercept_radius):
@@ -273,234 +283,3 @@ def Animando_vetores():
 
         bola["v"].append([(bola["x"][i + 1] - bola["x"][i]) / time_gap, (bola["y"][i + 1] - bola["y"][i]) / time_gap])
         bola["a"].append([(bola["v"][i][0] - bola["v"][i - 1][0]) / time_gap, (bola["v"][i][1] - bola["v"][i - 1][1]) / time_gap])
-
-
-def createGraphics():
-    robo_x2 = []
-    robo_y2 = []
-    robo_vx = []
-    robo_vy = []
-    robo_ax = []
-    robo_ay = []
-
-    bola_x2 = []
-    bola_y2 = []
-    bola_vx = []
-    bola_vy = []
-    bola_ax = []
-    bola_ay = []
-
-    time_interception = []
-
-    for i in range(len(robo["x"])):
-        bola_x2.append(bola["x"][i])
-        bola_y2.append(bola["y"][i])
-        robo_x2.append(robo["x"][i])
-        robo_y2.append(robo["y"][i])
-        time_interception.append(bola["t"][i])
-
-    for i in range(len(time_interception)):
-        time_gap = 0.02
-        robo_vx.append(robo["v"][i][0])
-        robo_vy.append(robo["v"][i][1])
-        robo_ax.append(robo["a"][i][0])
-        robo_ay.append(robo["a"][i][1])
-
-        if bola["t"][i + 1] % 0.02 != 0:
-            time_gap = bola["t"][i + 1] - bola["t"][i]
-
-        bola_vx.append((bola["x"][i + 1] - bola["x"][i]) / time_gap)
-        bola_vy.append((bola["y"][i + 1] - bola["y"][i]) / time_gap)
-        bola_ax.append((bola_vx[i] - bola_vx[i - 1]) / time_gap)
-        bola_ay.append((bola_vy[i] - bola_vy[i - 1]) / time_gap)
-
-    
-    while True:
-        print("____________ABA DE GRAFICOS_____________")
-        print()
-        print("Qual gráfico você quer ver?")
-        print("1 - ROBO")
-        print("2 - BOLA")
-        print("3 - BOLA / ROBO")
-        print("0 - Sair")
-        
-        choice_obj = int(input("-> "))
-        
-        if(choice_obj == 1):
-            print("Qual varivel você quer analisar do ROBO?")
-            print("1 - X")
-            print("2 - Vx")
-            print("3 - ax")
-            print("4 - Y")
-            print("5 - Vy")
-            print("6 - ay")
-            
-            choice_var = int(input("-> "))
-            
-            if(choice_var == 1):
-                print(time_interception)
-                print(robo_x2)
-                plt.plot(time_interception, robo_x2)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da posição X do robô pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("X (m)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-            elif(choice_var == 2):
-                plt.plot(time_interception, robo_vx)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da velocidade X do robô pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("VX (m/s)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-            elif(choice_var == 3):
-                plt.plot(time_interception, robo_ax)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da aceleração X do robô pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("AX (m/s^2)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-            elif(choice_var == 4):
-                plt.plot(time_interception, robo_y2)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da posição Y do robô pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("Y (m)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-            elif(choice_var == 5):
-                plt.plot(time_interception, robo_vy)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da velocidade Y do robô pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("VY (m/s)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-            elif(choice_var == 6):
-                plt.plot(time_interception, robo_ay)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da aceleração Y do robô pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("AY (m/s^2)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-        
-        elif(choice_obj == 2):
-            print("Qual varivel você quer analisar da BOLA?")
-            print("1 - X")
-            print("2 - Vx")
-            print("3 - ax")
-            print("4 - Y")
-            print("5 - Vy")
-            print("6 - ay")
-            choice_var = int(input())
-            
-            if(choice_var == 1):
-                plt.plot(time_interception, bola_x2)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da posição X da bola pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("X (m)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-            elif(choice_var == 2):
-                plt.plot(time_interception, bola_vx)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da velocidade X da bola pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("VX (m/s)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-            elif(choice_var == 3):
-                plt.plot(time_interception, bola_ay)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da aceleração Y da bola pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("AY (m/s^2)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-            elif(choice_var == 4):
-                plt.plot(time_interception, bola_y2)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da posição Y da bola pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("Y (m)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-            elif(choice_var == 5):
-                plt.plot(time_interception, bola_vy)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da velocidade Y da bola pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("VY (m/s)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-            elif(choice_var == 6):
-                plt.plot(time_interception, bola_ay)
-
-                # Título e nome dos eixos
-                plt.title("Gráfico da aceleração Y da bola pelo tempo.")
-                plt.xlabel("Tempo (t)")
-                plt.ylabel("AY (m/s^2)")
-
-                # Mostra o gráfico
-                plt.show()
-                
-        elif(choice_obj == 3):
-            plt.plot(robo_x2, robo_y2, label="robô", color='k',linestyle=":")
-            plt.plot(bola_x2, bola_y2, label="bola", color='b',linestyle="--")
-            # plt.plot(bola["x"], bola["y"], 'r--')
-            plt.plot(robo_x2[-1], robo_y2[-1])
-            plt.plot(bola_x2[-1], bola_y2[-1])
-
-            # Título e nome dos eixos
-            plt.title("Gráfico da trajetória da bola e do robô no campo.")
-            plt.xlabel("X")
-            plt.ylabel("Y")
-
-            # Mostra o gráfico
-            plt.show()
-            
-        elif(choice_obj == 0):
-            print("Obrigado por usar os serviços da OrangoCorps!")
-            break
-        else:
-            print("Opção inválida.")
-            return
-        
