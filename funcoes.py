@@ -228,7 +228,7 @@ def get_r_interceptacao():
     raio_interceptacao = (robo["raio"] + bola["raio"] - porcentagem) # RI = 0.1029 m
     
     # Estamos printando as distancias para uma melhor UX
-    print(dist)
+    print(f"{dist:.2f}")
 
     # Caso a distancia euclidiana seja maior que o raio de interceptacao o nosso programa entende que o robo nao 
     # alcançou a bola e adiciona os valores de distancia em uma lista para a criacao dos graficos posteriormente
