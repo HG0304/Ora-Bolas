@@ -66,10 +66,6 @@ def main():
     print("Hugo Emilio Nomura")
     print()
     
-    print(len(bola["x"]))
-    print(len(bola["y"]))
-    print(len(bola["t"]))
-    
     get_robo_pos()
     
     while(colisao == False):
@@ -78,13 +74,11 @@ def main():
         createGraphics()
 
 # get_V0x e get_V0y calculam as componentes x e y de um vetor a partir de um modulo e um angulo
-def get_V0x(v0,ang):
-    v0x = v0 * math.cos(math.radians(ang))  
-    return v0x
+def get_V0x(v0,ang): 
+    return v0 * math.cos(ang)
     
 def get_V0y(v0,ang):
-    v0y = v0 * math.sin(math.radians(ang)) 
-    return v0y
+    return v0 * math.sin(ang) 
 
 # primeiro, vamos iniciar o programa com uma função que irá carregar os dados do robo
 def get_robo_pos():
@@ -133,7 +127,6 @@ def calcular_distancia(instante):
     indice = int(instante / 0.02)
     dist_x = bola["x"][indice] - robo["x"][-1]
     dist_y = bola["y"][indice] - robo["y"][-1]
-    print("I:",indice)
     return dist_x, dist_y
 
 def get_angulo():
@@ -171,21 +164,21 @@ def get_angulo():
     # Calculamos a tangente inversa
     if(dist_x != 0):
         tg = abs(dist_y / dist_x) if quadrante in [1, 3] else abs(dist_x / dist_y)
-        angulo = math.atan(tg) + (quadrante - 1) * PI_MEIO # usado para ajustar o ângulo com base no quadrante em que ele se encontra
+        
+        # usado para ajustar o ângulo com base no quadrante em que ele se encontra
+        angulo = math.atan(tg) + (quadrante - 1) * PI_MEIO 
         return angulo
 
 # calcula o modulo de um vetor
 def get_mod_vetor(vetor):
-    return math.sqrt(vetor[0][0]**2 + vetor[0][1]**2)
+    return math.sqrt(vetor[-1][0]**2 + vetor[-1][1]**2)
 
 def get_v_Robo():
     ang = get_angulo()
-    print("V")
-    print("Robo X: ",robo["v"][-1][0])
-    print("Robo Y: ",robo["v"][-1][1])    
+       
     if(robo["a"][-1] != [0, 0]):
         robo["v"].append([robo["v"][-1][0] + robo["a"][-1][0], robo["v"][-1][1] + robo["a"][-1][1]])
-    else: 
+    else:
         robo["v"].append([get_V0x(2.8, ang), get_V0y(2.8, ang)])
 
 # Agora, vamos definir a aceleracao do robo
@@ -197,13 +190,12 @@ def get_a_Robo():
     
     Vmax = 2.8 * 0.02
     ang = get_angulo()
-    print("A")
-    print("Robo x: ",robo["a"][-1][0])
-    print("Robo y: ",robo["a"][-1][1])
+    
     vetor_Vmax = [get_V0x(Vmax, ang), get_V0y(Vmax, ang)] # decomposicao vetorial da velocidade maxima
 
     # Caso o robo ainda não tenha atingido a velocidade maxima, ele acelera
-    if(len(robo["a"]) > 0 and get_mod_vetor(robo["v"]) < 2.8):
+    
+    if(get_mod_vetor(robo["v"]) < 2.8):
         acelerando = [vetor_Vmax[0] + robo["a"][-1][0], vetor_Vmax[1] + robo["a"][-1][1]] # acelerando o robo
         robo["a"].append(acelerando)
     else:
@@ -220,7 +212,7 @@ def get_dist_euclidiana():
     global instante
 
     dist_x, dist_y = calcular_distancia(instante)
-    print
+    
     return math.sqrt(dist_x**2 + dist_y**2)
 
 # Pegando o raio de interceptação
@@ -228,33 +220,34 @@ def get_r_interceptacao():
     global colisao
     global dist_euclidiana
     
-    # Margem de erro de 20% do raio da bola
-    porcentagem = (bola["raio"] * 2) * 0.2
+    # Margem de erro de 20% do diametro da bola
+    porcentagem = bola["raio"] * 2 * 0.2
 
     dist = get_dist_euclidiana()
-    intercept_radius = (robo["raio"] + (bola["raio"] - porcentagem))
-    print("Dist: ",dist)
-    print(intercept_radius)
-
+    intercept_radius = (robo["raio"] + bola["raio"] + porcentagem)
     
+    print(dist)
+
     if(dist > intercept_radius):
         dist_euclidiana.append(dist)
         
-    else:
+    elif(dist <= intercept_radius):
         dist_euclidiana.append(dist)
-        print("A")
         colisao = True
         
 # Função que atualiza a aceleracao, velocidade e posição do robo a cada 0.02s caso não haja colisão
 def att_robo():
+    sleep(0.5)
     global instante
     global colisao
     
+    get_dist_euclidiana()
     get_r_interceptacao()
+
     
     if(colisao == False):
-        get_v_Robo()
         get_a_Robo()
+        get_v_Robo()
         
         robo["x"].append(robo["x"][-1] + robo["v"][-1][0])
         robo["y"].append(robo["y"][-1] + robo["v"][-1][1])
