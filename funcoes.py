@@ -11,6 +11,7 @@ import random
 from time import sleep
 import pandas as pd # manusear .xlsx 
 from grafico import createGraphics # puxando os graficos do outro codigo
+from GUI import *
 
 # VARIAVEIS GLOBAIS
 # Estas variaveis serão utilizadas em mais de uma função e por isso foram declaradas como globais
@@ -76,6 +77,7 @@ def main():
     while not colisao:
         att_robo()
     else:
+        GUI_campo(robo,bola)
         createGraphics(robo,bola)
 
 # get_V0x e get_V0y calculam as componentes x e y de um vetor a partir de um modulo e um angulo
@@ -90,7 +92,7 @@ def get_robo_pos():
     print('\nDigite a opção desejada:')
     print()
     print("1 - Escolher posição inicial.")
-    print("2 - Gerar posição inicial aletaória.")
+    print("2 - Gerar posição inicial aleatória.")
     choice = int(input("-> "))
 
     if(choice == 1):
@@ -283,3 +285,4 @@ def Animando_vetores():
 
         bola["v"].append([(bola["x"][i + 1] - bola["x"][i]) / time_gap, (bola["y"][i + 1] - bola["y"][i]) / time_gap])
         bola["a"].append([(bola["v"][i][0] - bola["v"][i - 1][0]) / time_gap, (bola["v"][i][1] - bola["v"][i - 1][1]) / time_gap])
+
