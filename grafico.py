@@ -47,7 +47,7 @@ def createGraphics(robo,bola,dist_euclidiana):
         print("1 - ROBO")
         print("2 - BOLA")
         print("3 - BOLA / ROBO")
-        print("4 - DISTANCIA ""D"" ENTRE O ROBO E A BOLA PELO TEMPO")
+        print("4 - DISTANCIA RELATIVA ENTRE O ROBO E A BOLA PELO TEMPO")
         print("0 - Sair") 
         
         choice_obj = int(input("-> "))
@@ -255,7 +255,7 @@ def createGraphics(robo,bola,dist_euclidiana):
         elif(choice_obj == 4):
             ax = plt.axes() 
             ax.set_facecolor("grey")
-            plt.plot(time_interception,dist_euclidiana, color="w", linestyle="-.", label="Distância D")
+            plt.plot(time_interception,dist_euclidiana, color="w", linestyle="-.", label="Distância relativa")
             plt.legend()
             # Título e nome dos eixos
             plt.title("Gráfico da distancia relativa entre o Robo e a Bola pelo Tempo.")
