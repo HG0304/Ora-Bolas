@@ -258,7 +258,7 @@ def createGraphics(robo,bola,dist_euclidiana):
             plt.plot(time_interception,dist_euclidiana, color="w", linestyle="-.", label="Distância D")
             plt.legend()
             # Título e nome dos eixos
-            plt.title("Gráfico da distancia entre o Robo e a Bola pelo Tempo.")
+            plt.title("Gráfico da distancia relativa entre o Robo e a Bola pelo Tempo.")
             plt.xlabel("Tempo (t)")
             plt.ylabel("Distância (m)")
 
