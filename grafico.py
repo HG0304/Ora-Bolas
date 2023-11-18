@@ -187,10 +187,10 @@ def createGraphics(robo,bola,dist_euclidiana):
             elif(choice_var == 3):
                 ax = plt.axes() 
                 ax.set_facecolor("grey")
-                plt.plot(time_interception, bola_ay, color="w", linestyle="-.", label="Aceleração X")
+                plt.plot(time_interception, bola_ax, color="w", linestyle="-.", label="Aceleração X")
 
                 # Título e nome dos eixos
-                plt.title("Gráfico da aceleração Y da bola pelo tempo.")
+                plt.title("Gráfico da aceleração X da bola pelo tempo.")
                 plt.xlabel("Tempo (t)")
                 plt.ylabel("AY (m/s^2)")
 
